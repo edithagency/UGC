@@ -228,8 +228,6 @@ export function NewLeadForm() {
               {[
                 { k: "link" as const, label: "Site / réseau", placeholder: "https://…" },
                 { k: "contact" as const, label: "Contact", placeholder: "contact@marque.com ou @marque" },
-                { k: "why" as const, label: "Pourquoi elle m'intéresse", placeholder: "Ex : marque que j'utilise déjà" },
-                { k: "content_idea" as const, label: "Idée de contenu", placeholder: "Ex : problème peau grasse → solution" },
               ].map((f) => (
                 <div key={f.k}>
                   <label className="block uppercase tracking-wider text-[10px] md:text-xs font-bold mb-2" style={{ color: OLIVE }}>

@@ -103,12 +103,6 @@ export function LeadRow({ lead }: { lead: Lead }) {
           <span className="opacity-40" style={{ color: OLIVE }}>—</span>
         )}
       </td>
-      <td className="pl-6 pr-4 py-2 italic" style={{ color: OLIVE }}>
-        {lead.why || <span className="opacity-40 not-italic">—</span>}
-      </td>
-      <td className="pl-6 pr-4 py-2" style={{ color: OLIVE }}>
-        {lead.content_idea || <span className="opacity-40">—</span>}
-      </td>
       <td className="pl-6 pr-4 py-2">
         <select
           defaultValue={lead.status}

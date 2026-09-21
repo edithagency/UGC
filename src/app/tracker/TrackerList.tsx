@@ -175,15 +175,13 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
     <div className="mt-4 overflow-x-auto rounded-2xl" style={{ backgroundColor: "#faf7e0" }}>
       <table className="w-full text-sm min-w-[1200px] table-fixed">
         <colgroup>
-          <col style={{ width: "11%" }} />
-          <col style={{ width: "9%" }} />
-          <col style={{ width: "7%" }} />
-          <col style={{ width: "10%" }} />
-          <col style={{ width: "11%" }} />
-          <col style={{ width: "13%" }} />
-          <col style={{ width: "13%" }} />
           <col style={{ width: "16%" }} />
-          <col style={{ width: "10%" }} />
+          <col style={{ width: "13%" }} />
+          <col style={{ width: "12%" }} />
+          <col style={{ width: "15%" }} />
+          <col style={{ width: "15%" }} />
+          <col style={{ width: "18%" }} />
+          <col style={{ width: "11%" }} />
         </colgroup>
         <thead>
           <tr
@@ -202,8 +200,6 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
             <th className="pl-6 pr-4 py-2">Source</th>
             <th className="pl-6 pr-4 py-2">Contact</th>
             <th className="pl-6 pr-4 py-2">Lien</th>
-            <th className="pl-6 pr-4 py-2">Pourquoi</th>
-            <th className="pl-6 pr-4 py-2">Idée de contenu</th>
             <th className="pl-6 pr-4 py-2">
               <FilterHeader
                 label="Statut"
@@ -219,7 +215,7 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
           {filtered.length === 0 ? (
             <tr>
               <td
-                colSpan={9}
+                colSpan={7}
                 className="px-4 py-8 text-center"
                 style={{ color: OLIVE, opacity: 0.7 }}
               >
