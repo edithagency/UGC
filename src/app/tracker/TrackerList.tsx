@@ -190,8 +190,8 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
             className="uppercase tracking-wider text-[10px] md:text-xs font-black text-left"
             style={{ color: OLIVE, borderBottom: `1.5px solid ${CREAM}` }}
           >
-            <th className="px-4 py-3">Marque</th>
-            <th className="px-4 py-3">
+            <th className="pl-6 pr-4 py-3">Marque</th>
+            <th className="pl-6 pr-4 py-3">
               <FilterHeader
                 label="Secteur"
                 options={sectorOptions}
@@ -199,12 +199,12 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
                 onChange={setSector}
               />
             </th>
-            <th className="px-4 py-3">Source</th>
-            <th className="px-4 py-3">Contact</th>
-            <th className="px-4 py-3">Lien</th>
-            <th className="px-4 py-3">Pourquoi</th>
-            <th className="px-4 py-3">Idée de contenu</th>
-            <th className="px-4 py-3">
+            <th className="pl-6 pr-4 py-3">Source</th>
+            <th className="pl-6 pr-4 py-3">Contact</th>
+            <th className="pl-6 pr-4 py-3">Lien</th>
+            <th className="pl-6 pr-4 py-3">Pourquoi</th>
+            <th className="pl-6 pr-4 py-3">Idée de contenu</th>
+            <th className="pl-6 pr-4 py-3">
               <FilterHeader
                 label="Statut"
                 options={STATUSES}
@@ -212,7 +212,7 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
                 onChange={setStatus}
               />
             </th>
-            <th className="px-4 py-3"></th>
+            <th className="pl-6 pr-4 py-3"></th>
           </tr>
         </thead>
         <tbody>
