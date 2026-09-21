@@ -67,13 +67,13 @@ export function LeadRow({ lead }: { lead: Lead }) {
       className="align-top"
       style={{ borderBottom: `1px solid ${CREAM}`, backgroundColor: rowBg }}
     >
-      <td className="pl-6 pr-4 py-2">
+      <td className="px-4 py-1.5 text-center">
         <span className="font-black" style={{ color: OLIVE }}>{lead.brand_name}</span>
       </td>
-      <td className="pl-6 pr-4 py-2" style={{ color: OLIVE }}>
+      <td className="px-4 py-1.5 text-center" style={{ color: OLIVE }}>
         {lead.sector || <span className="opacity-40">—</span>}
       </td>
-      <td className="pl-6 pr-4 py-2">
+      <td className="px-4 py-1.5 text-center">
         {lead.source ? (
           <span
             className="uppercase tracking-wider text-[9px] font-black px-2 py-1 rounded-full"
@@ -85,10 +85,10 @@ export function LeadRow({ lead }: { lead: Lead }) {
           <span className="opacity-40" style={{ color: OLIVE }}>—</span>
         )}
       </td>
-      <td className="pl-6 pr-4 py-2" style={{ color: OLIVE }}>
+      <td className="px-4 py-1.5 text-center" style={{ color: OLIVE }}>
         {lead.contact || <span className="opacity-40">—</span>}
       </td>
-      <td className="pl-6 pr-4 py-2">
+      <td className="px-4 py-1.5 text-center">
         {lead.link ? (
           <a
             href={lead.link}
@@ -103,7 +103,7 @@ export function LeadRow({ lead }: { lead: Lead }) {
           <span className="opacity-40" style={{ color: OLIVE }}>—</span>
         )}
       </td>
-      <td className="pl-6 pr-4 py-2">
+      <td className="px-4 py-1.5 text-center">
         <select
           defaultValue={lead.status}
           disabled={pending}
@@ -129,14 +129,14 @@ export function LeadRow({ lead }: { lead: Lead }) {
           ))}
         </select>
         <div
-          className="mt-1 text-[10px] md:text-xs text-center"
-          style={{ color: OLIVE, opacity: 0.7 }}
+          className="mt-0.5 text-[9px] italic text-center"
+          style={{ color: OLIVE, opacity: 0.6 }}
           title={new Date(lead.updated_at).toLocaleString("fr-FR")}
         >
           Modifié {timeAgoFr(lead.updated_at)}
         </div>
       </td>
-      <td className="pl-6 pr-4 py-2 text-right">
+      <td className="px-4 py-1.5 text-right">
         <div className="inline-flex items-center gap-2 pl-4" style={{ borderLeft: `1px solid ${CREAM}` }}>
           <EditLeadButton lead={lead} />
           <button
