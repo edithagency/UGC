@@ -175,15 +175,14 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
     <div className="mt-4 overflow-x-auto rounded-2xl" style={{ backgroundColor: "#faf7e0" }}>
       <table className="w-full text-sm min-w-[1100px] table-fixed">
         <colgroup>
-          <col style={{ width: "11%" }} />
+          <col style={{ width: "16%" }} />
           <col style={{ width: "10%" }} />
           <col style={{ width: "8%" }} />
           <col style={{ width: "10%" }} />
           <col style={{ width: "12%" }} />
-          <col style={{ width: "13%" }} />
           <col style={{ width: "14%" }} />
+          <col style={{ width: "16%" }} />
           <col style={{ width: "14%" }} />
-          <col style={{ width: "8%" }} />
         </colgroup>
         <thead>
           <tr
@@ -212,14 +211,13 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
                 onChange={setStatus}
               />
             </th>
-            <th className="px-4 py-3"></th>
           </tr>
         </thead>
         <tbody>
           {filtered.length === 0 ? (
             <tr>
               <td
-                colSpan={9}
+                colSpan={8}
                 className="px-4 py-8 text-center"
                 style={{ color: OLIVE, opacity: 0.7 }}
               >

@@ -68,7 +68,28 @@ export function LeadRow({ lead }: { lead: Lead }) {
       style={{ borderBottom: `1px solid ${CREAM}`, backgroundColor: rowBg }}
     >
       <td className="px-4 py-3">
-        <span className="font-black" style={{ color: OLIVE }}>{lead.brand_name}</span>
+        <div className="flex items-center gap-2">
+          <EditLeadButton lead={lead} />
+          <button
+            type="button"
+            onClick={() => {
+              if (!confirm(`Supprimer "${lead.brand_name}" ?`)) return;
+              const fd = new FormData();
+              fd.set("id", lead.id);
+              startTransition(async () => {
+                await deleteLead(fd);
+              });
+            }}
+            disabled={pending}
+            aria-label={`Supprimer ${lead.brand_name}`}
+            className="w-6 h-6 inline-flex items-center justify-center hover:opacity-70 transition-opacity flex-shrink-0"
+            style={{ color: OLIVE }}
+            title="Supprimer"
+          >
+            ✕
+          </button>
+          <span className="font-black" style={{ color: OLIVE }}>{lead.brand_name}</span>
+        </div>
       </td>
       <td className="px-4 py-3" style={{ color: OLIVE }}>
         {lead.sector || <span className="opacity-40">—</span>}
@@ -140,29 +161,6 @@ export function LeadRow({ lead }: { lead: Lead }) {
           title={new Date(lead.updated_at).toLocaleString("fr-FR")}
         >
           Modifié {timeAgoFr(lead.updated_at)}
-        </div>
-      </td>
-      <td className="px-4 py-3 text-right">
-        <div className="inline-flex items-center gap-1">
-          <EditLeadButton lead={lead} />
-          <button
-            type="button"
-            onClick={() => {
-              if (!confirm(`Supprimer "${lead.brand_name}" ?`)) return;
-              const fd = new FormData();
-              fd.set("id", lead.id);
-              startTransition(async () => {
-                await deleteLead(fd);
-              });
-            }}
-            disabled={pending}
-            aria-label={`Supprimer ${lead.brand_name}`}
-            className="w-6 h-6 inline-flex items-center justify-center hover:opacity-70 transition-opacity"
-            style={{ color: OLIVE }}
-            title="Supprimer"
-          >
-            ✕
-          </button>
         </div>
       </td>
     </tr>
