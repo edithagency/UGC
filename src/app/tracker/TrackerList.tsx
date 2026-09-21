@@ -188,7 +188,7 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
             className="uppercase tracking-wider text-[10px] md:text-xs font-black text-center"
             style={{ color: OLIVE, borderBottom: `1.5px solid ${CREAM}` }}
           >
-            <th className="px-6 py-2.5 text-center">Marque</th>
+            <th className="pl-2 pr-4 py-2.5 text-left">Marque</th>
             <th className="px-6 py-2.5 text-center">
               <FilterHeader
                 label="Secteur"
@@ -200,7 +200,7 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
             <th className="px-6 py-2.5 text-center">Source</th>
             <th className="px-6 py-2.5 text-center">Contact</th>
             <th className="px-6 py-2.5 text-center">Lien</th>
-            <th className="px-6 py-2.5 text-center">
+            <th className="pl-4 pr-2 py-2.5 text-right">
               <FilterHeader
                 label="Statut"
                 options={STATUSES}

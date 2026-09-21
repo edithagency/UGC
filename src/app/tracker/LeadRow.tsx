@@ -67,7 +67,7 @@ export function LeadRow({ lead }: { lead: Lead }) {
       className="align-middle"
       style={{ borderBottom: `1px solid ${CREAM}`, backgroundColor: rowBg }}
     >
-      <td className="px-6 py-2.5 text-center">
+      <td className="pl-2 pr-4 py-2.5 text-left">
         <span className="font-black" style={{ color: OLIVE }}>{lead.brand_name}</span>
       </td>
       <td className="px-6 py-2.5 text-center" style={{ color: OLIVE }}>
@@ -103,7 +103,7 @@ export function LeadRow({ lead }: { lead: Lead }) {
           <span className="opacity-40" style={{ color: OLIVE }}>—</span>
         )}
       </td>
-      <td className="px-6 py-2.5 text-center">
+      <td className="pl-4 pr-2 py-2.5 text-right">
         <select
           defaultValue={lead.status}
           disabled={pending}
@@ -151,7 +151,7 @@ export function LeadRow({ lead }: { lead: Lead }) {
             }}
             disabled={pending}
             aria-label={`Supprimer ${lead.brand_name}`}
-            className="w-6 h-6 inline-flex items-center justify-center hover:opacity-70 transition-opacity"
+            className="w-4 h-4 inline-flex items-center justify-center hover:opacity-70 transition-opacity text-xs"
             style={{ color: OLIVE }}
             title="Supprimer"
           >

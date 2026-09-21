@@ -108,11 +108,11 @@ export function EditLeadButton({ lead }: { lead: Lead }) {
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`Modifier ${lead.brand_name}`}
-        className="w-6 h-6 inline-flex items-center justify-center hover:opacity-70 transition-opacity"
+        className="w-4 h-4 inline-flex items-center justify-center hover:opacity-70 transition-opacity"
         style={{ color: OLIVE }}
         title="Modifier"
       >
-        <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 20 20" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M14 2l4 4-10 10H4v-4L14 2z" />
         </svg>
       </button>
