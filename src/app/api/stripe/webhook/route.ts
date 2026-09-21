@@ -1,6 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
+import { getResend, deliveryEmail } from "@/lib/emails";
+
+const PRODUCT_NAMES: Record<string, string> = {
+  "tracker-pro": "Tracker Pro",
+  "black-and-white": "Portfolio Black & White",
+  "template-02": "Portfolio Template 2",
+  "template-03": "Portfolio Template 3",
+  "template-04": "Portfolio Template 4",
+  "template-05": "Portfolio Template 5",
+  "template-06": "Portfolio Template 6",
+  "template-07": "Portfolio Template 7",
+};
 
 // Webhook Stripe : évite la revalidation Next et lit le raw body
 export const runtime = "nodejs";
@@ -29,11 +41,13 @@ export async function POST(request: NextRequest) {
     const s = event.data.object;
     const admin = await createSupabaseServiceClient();
     const userId = s.metadata?.user_id || null;
+    const templateSlug = (s.metadata?.template as string) || "";
     const discountApplied = s.metadata?.discount_applied === "1";
+    const email = s.customer_details?.email ?? s.customer_email ?? "";
 
     await admin.from("orders").insert({
       user_id: userId,
-      email: s.customer_details?.email ?? s.customer_email ?? "",
+      email,
       stripe_session_id: s.id,
       stripe_payment_intent:
         typeof s.payment_intent === "string" ? s.payment_intent : null,
@@ -48,6 +62,38 @@ export async function POST(request: NextRequest) {
         .from("profiles")
         .update({ template_discount_used: true })
         .eq("id", userId);
+    }
+
+    // Tracker Pro : débloquer le compte
+    if (templateSlug === "tracker-pro" && userId) {
+      await admin
+        .from("profiles")
+        .update({ tracker_pro: true })
+        .eq("id", userId);
+    }
+
+    // Envoyer l'email de livraison
+    const resend = getResend();
+    const from = process.env.RESEND_FROM_EMAIL;
+    if (resend && from && email) {
+      const productName = PRODUCT_NAMES[templateSlug] ?? "Ton produit";
+      const isTrackerPro = templateSlug === "tracker-pro";
+      const envKey = templateSlug
+        ? `DELIVERY_URL_${templateSlug.toUpperCase().replace(/-/g, "_")}`
+        : null;
+      const downloadUrl = envKey ? process.env[envKey] ?? null : null;
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://edithapppugc.com";
+      const { subject, html } = deliveryEmail({
+        productName,
+        downloadUrl,
+        siteUrl,
+        isTrackerPro,
+      });
+      try {
+        await resend.emails.send({ from, to: email, subject, html });
+      } catch (e) {
+        console.error("Resend delivery email failed", e);
+      }
     }
   }
 
