@@ -7,5 +7,5 @@ export function getStripe() {
 }
 
 export function stripeEnabled() {
-  return Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_TEMPLATE_PRICE_ID);
+  return Boolean(process.env.STRIPE_SECRET_KEY);
 }
