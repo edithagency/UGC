@@ -1,36 +1,13 @@
 "use client";
 
 import { useActionState } from "react";
-import { sendMagicLink, type LoginState } from "@/app/actions/auth";
-
-const SEGMENTATION_OPTIONS = [
-  "Je découvre l'UGC",
-  "J'ai déjà tenté sans succès",
-  "J'ai fait 1-2 collabs",
-  "J'ai un peu de clients réguliers",
-];
+import { signIn, type AuthState } from "@/app/actions/auth";
 
 export function LoginForm({ redirectTo }: { redirectTo?: string }) {
-  const [state, formAction, pending] = useActionState<LoginState, FormData>(
-    sendMagicLink,
+  const [state, formAction, pending] = useActionState<AuthState, FormData>(
+    signIn,
     undefined
   );
-
-  if (state?.ok) {
-    return (
-      <div className="text-center py-4">
-        <div className="text-4xl">📬</div>
-        <h2 className="text-xl font-bold mt-3">Check tes emails</h2>
-        <p className="text-[var(--muted)] mt-2 text-sm">
-          On a envoyé un lien à <strong>{state.email}</strong>. Clique dessus pour te
-          connecter. Ça peut prendre 1-2 minutes.
-        </p>
-        <p className="text-xs text-[var(--muted)] mt-4">
-          Pas reçu ? Vérifie tes spams, puis réessaye.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <form action={formAction} className="space-y-4">
@@ -38,7 +15,7 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
 
       <div>
         <label htmlFor="email" className="block text-sm font-semibold mb-1">
-          Ton email
+          Email
         </label>
         <input
           id="email"
@@ -46,6 +23,7 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
           type="email"
           autoComplete="email"
           required
+          defaultValue={state?.email ?? ""}
           placeholder="prenom@exemple.com"
           className="w-full px-4 py-3 border border-[var(--border)] rounded-xl bg-white focus:outline-none focus:border-[var(--brand)]"
         />
@@ -55,34 +33,29 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold mb-1">
-          T'en es où dans ton parcours UGC ?{" "}
-          <span className="text-[var(--muted)] font-normal">(optionnel)</span>
+        <label htmlFor="password" className="block text-sm font-semibold mb-1">
+          Mot de passe
         </label>
-        <select
-          name="segmentation"
-          defaultValue=""
-          className="w-full px-4 py-3 border border-[var(--border)] rounded-xl bg-white"
-        >
-          <option value="">—</option>
-          {SEGMENTATION_OPTIONS.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+          minLength={8}
+          className="w-full px-4 py-3 border border-[var(--border)] rounded-xl bg-white focus:outline-none focus:border-[var(--brand)]"
+        />
+        {state?.errors?.password && (
+          <p className="text-xs text-red-600 mt-1">{state.errors.password[0]}</p>
+        )}
       </div>
 
       {state?.message && !state.ok && (
         <p className="text-sm text-red-600">{state.message}</p>
       )}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="btn btn-primary w-full text-base"
-      >
-        {pending ? "On envoie…" : "M'envoyer le lien magique"}
+      <button type="submit" disabled={pending} className="btn btn-primary w-full">
+        {pending ? "Connexion…" : "Se connecter"}
       </button>
     </form>
   );

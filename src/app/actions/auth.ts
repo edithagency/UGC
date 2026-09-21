@@ -4,59 +4,133 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-const LoginSchema = z.object({
+const SignInSchema = z.object({
   email: z.string().email({ message: "Email pas valide" }).trim(),
-  segmentation: z.string().max(200).optional().nullable(),
+  password: z.string().min(8, { message: "8 caractères minimum" }),
   redirect: z.string().optional().nullable(),
 });
 
-export type LoginState =
-  | { ok?: boolean; message?: string; email?: string; errors?: Record<string, string[]> }
+const SignUpSchema = SignInSchema.extend({
+  segmentation: z.string().max(200).optional().nullable(),
+});
+
+export type AuthState =
+  | {
+      ok?: boolean;
+      message?: string;
+      email?: string;
+      errors?: Record<string, string[]>;
+    }
   | undefined;
 
-export async function sendMagicLink(
-  _prev: LoginState,
+function siteUrl() {
+  return (
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
+  );
+}
+
+// ---- INSCRIPTION ----
+
+export async function signUp(
+  _prev: AuthState,
   formData: FormData
-): Promise<LoginState> {
-  const parsed = LoginSchema.safeParse({
+): Promise<AuthState> {
+  const parsed = SignUpSchema.safeParse({
     email: formData.get("email"),
-    segmentation: formData.get("segmentation") ?? null,
+    password: formData.get("password"),
+    segmentation: formData.get("segmentation") || null,
     redirect: formData.get("redirect") ?? null,
   });
 
   if (!parsed.success) {
-    return {
-      ok: false,
-      errors: parsed.error.flatten().fieldErrors,
-    };
+    return { ok: false, errors: parsed.error.flatten().fieldErrors };
   }
 
-  const { email, segmentation, redirect: nextPath } = parsed.data;
+  const { email, password, segmentation, redirect: nextPath } = parsed.data;
   const supabase = await createSupabaseServerClient();
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
-
-  const callbackUrl = new URL("/auth/callback", siteUrl);
-  if (nextPath) callbackUrl.searchParams.set("next", nextPath);
-  if (segmentation) callbackUrl.searchParams.set("seg", segmentation);
-
-  const { error } = await supabase.auth.signInWithOtp({
+  const { data, error } = await supabase.auth.signUp({
     email,
-    options: { emailRedirectTo: callbackUrl.toString() },
+    password,
+    options: {
+      emailRedirectTo: `${siteUrl()}/auth/callback?next=${encodeURIComponent(
+        nextPath ?? "/dashboard"
+      )}`,
+    },
   });
 
   if (error) {
-    return { ok: false, message: error.message, email };
+    return {
+      ok: false,
+      message: error.message.toLowerCase().includes("registered")
+        ? 'Ce compte existe déjà — va sur "Se connecter".'
+        : error.message,
+      email,
+    };
+  }
+
+  if (data.user && segmentation) {
+    await supabase
+      .from("profiles")
+      .update({ segmentation })
+      .eq("id", data.user.id);
+  }
+
+  // Si Supabase = confirmation email désactivée, la session est active → dashboard
+  if (data.session) {
+    redirect(nextPath && nextPath.startsWith("/") ? nextPath : "/dashboard");
   }
 
   return {
     ok: true,
     email,
-    message: "Check tes emails — clique sur le lien magique pour te connecter.",
+    message:
+      "Compte créé. Vérifie tes emails pour confirmer ton adresse, puis reviens te connecter.",
   };
 }
+
+// ---- CONNEXION ----
+
+export async function signIn(
+  _prev: AuthState,
+  formData: FormData
+): Promise<AuthState> {
+  const parsed = SignInSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+    redirect: formData.get("redirect") ?? null,
+  });
+
+  if (!parsed.success) {
+    return { ok: false, errors: parsed.error.flatten().fieldErrors };
+  }
+
+  const { email, password, redirect: nextPath } = parsed.data;
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    return {
+      ok: false,
+      message:
+        error.message === "Invalid login credentials"
+          ? "Email ou mot de passe incorrect."
+          : error.message,
+      email,
+    };
+  }
+
+  await supabase
+    .from("profiles")
+    .update({ last_activity_at: new Date().toISOString() })
+    .eq("email", email);
+
+  redirect(nextPath && nextPath.startsWith("/") ? nextPath : "/dashboard");
+}
+
+// ---- DECONNEXION / SUPPRESSION ----
 
 export async function signOut() {
   const supabase = await createSupabaseServerClient();
@@ -73,7 +147,6 @@ export async function deleteMyAccount() {
 
   const { createSupabaseServiceClient } = await import("@/lib/supabase/server");
   const admin = await createSupabaseServiceClient();
-  // Cascade delete supprime profil, progression, leads, orders.
   await admin.auth.admin.deleteUser(user.id);
   await supabase.auth.signOut();
   redirect("/");

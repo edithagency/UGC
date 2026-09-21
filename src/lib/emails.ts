@@ -32,7 +32,7 @@ export function reminderEmail({
         </a>
       </p>
       <p style="color:#a19a90;font-size:12px;margin-top:32px">
-        Tu peux te désinscrire de ces rappels dans ton compte edithappp.com/compte
+        Tu peux te désinscrire de ces rappels dans ton compte edithapppugc.com/compte
       </p>
     </div>
   `;

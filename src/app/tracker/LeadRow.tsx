@@ -2,11 +2,21 @@
 
 import { useTransition } from "react";
 import { deleteLead, updateLeadStatus } from "./actions";
+import { timeAgoFr } from "@/lib/timeAgo";
+import { EditLeadButton } from "./EditLeadButton";
+
+const OLIVE = "#615326";
+const CREAM = "#f4efc2";
 
 type Lead = {
   id: string;
   brand_name: string;
   contact: string | null;
+  sector: string | null;
+  link: string | null;
+  why: string | null;
+  content_idea: string | null;
+  source: string | null;
   status: string;
   notes: string | null;
   sent_at: string | null;
@@ -16,75 +26,145 @@ type Lead = {
 
 const STATUSES = [
   { v: "a_contacter", l: "À contacter" },
-  { v: "envoye", l: "Envoyé" },
-  { v: "repondu", l: "Répondu" },
-  { v: "collab_signee", l: "Signée" },
-  { v: "sans_suite", l: "Sans suite" },
+  { v: "envoye", l: "Contactée" },
+  { v: "a_relancer", l: "À relancer" },
+  { v: "relancee", l: "Relancée" },
+  { v: "en_discussion", l: "En discussion" },
+  { v: "collab_signee", l: "Collaboration en cours" },
+  { v: "terminee", l: "Terminée" },
+  { v: "sans_suite", l: "Refus" },
 ];
 
-const STATUS_COLOR: Record<string, string> = {
-  a_contacter: "bg-gray-100 text-gray-700",
-  envoye: "bg-blue-50 text-blue-700",
-  repondu: "bg-amber-50 text-amber-700",
-  collab_signee: "bg-green-50 text-green-700",
-  sans_suite: "bg-red-50 text-red-700",
+const STATUS_STYLE: Record<string, { bg: string; color: string; border: string }> = {
+  a_contacter: { bg: "#f0e59b", color: "#6f5f1f", border: "#6f5f1f" },
+  envoye: { bg: "#e5eefc", color: "#4c6b9c", border: "#4c6b9c" },
+  a_relancer: { bg: "#fde3c8", color: "#b86b2c", border: "#b86b2c" },
+  relancee: { bg: "#d5e8e8", color: "#4d7a7a", border: "#4d7a7a" },
+  en_discussion: { bg: "#ece0f5", color: "#7a5aa1", border: "#7a5aa1" },
+  collab_signee: { bg: "#dff0dd", color: "#4f7d55", border: "#4f7d55" },
+  terminee: { bg: "#e2ebe2", color: "#556d55", border: "#556d55" },
+  sans_suite: { bg: "#fadada", color: "#a56b6b", border: "#a56b6b" },
+};
+
+const ROW_BG: Record<string, string> = {
+  a_contacter: "#fbf7dd",
+  envoye: "#f3f6fd",
+  a_relancer: "#fcefe0",
+  relancee: "#eaf4f4",
+  en_discussion: "#f5efff",
+  collab_signee: "#eff8ee",
+  terminee: "#f1f5f1",
+  sans_suite: "#fceeee",
 };
 
 export function LeadRow({ lead }: { lead: Lead }) {
   const [pending, startTransition] = useTransition();
+  const s = STATUS_STYLE[lead.status] ?? STATUS_STYLE.a_contacter;
+  const rowBg = ROW_BG[lead.status] ?? "transparent";
 
   return (
-    <li className="card flex flex-wrap items-center gap-3">
-      <div className="flex-1 min-w-[180px]">
-        <div className="font-bold">{lead.brand_name}</div>
-        {lead.contact && (
-          <div className="text-xs text-[var(--muted)]">{lead.contact}</div>
+    <tr
+      className="align-top"
+      style={{ borderBottom: `1px solid ${CREAM}`, backgroundColor: rowBg }}
+    >
+      <td className="px-4 py-3">
+        <span className="font-black" style={{ color: OLIVE }}>{lead.brand_name}</span>
+      </td>
+      <td className="px-4 py-3" style={{ color: OLIVE }}>
+        {lead.sector || <span className="opacity-40">—</span>}
+      </td>
+      <td className="px-4 py-3">
+        {lead.source ? (
+          <span
+            className="uppercase tracking-wider text-[9px] font-black px-2 py-1 rounded-full"
+            style={{ backgroundColor: CREAM, color: OLIVE }}
+          >
+            {lead.source}
+          </span>
+        ) : (
+          <span className="opacity-40" style={{ color: OLIVE }}>—</span>
         )}
-        {lead.notes && (
-          <div className="text-sm text-[var(--muted)] mt-1 line-clamp-2">{lead.notes}</div>
+      </td>
+      <td className="px-4 py-3" style={{ color: OLIVE }}>
+        {lead.contact || <span className="opacity-40">—</span>}
+      </td>
+      <td className="px-4 py-3">
+        {lead.link ? (
+          <a
+            href={lead.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline break-all"
+            style={{ color: OLIVE }}
+          >
+            {lead.link.length > 28 ? lead.link.slice(0, 28) + "…" : lead.link}
+          </a>
+        ) : (
+          <span className="opacity-40" style={{ color: OLIVE }}>—</span>
         )}
-      </div>
-
-      <span
-        className={`text-xs font-semibold px-2 py-1 rounded-full ${STATUS_COLOR[lead.status]}`}
-      >
-        {STATUSES.find((s) => s.v === lead.status)?.l ?? lead.status}
-      </span>
-
-      <select
-        defaultValue={lead.status}
-        disabled={pending}
-        onChange={(e) => {
-          const fd = new FormData();
-          fd.set("id", lead.id);
-          fd.set("status", e.target.value);
-          startTransition(async () => {
-            await updateLeadStatus(fd);
-          });
-        }}
-        className="px-2 py-1 text-sm border border-[var(--border)] rounded-lg bg-white"
-      >
-        {STATUSES.map((s) => (
-          <option key={s.v} value={s.v}>
-            {s.l}
-          </option>
-        ))}
-      </select>
-
-      <button
-        onClick={() => {
-          if (!confirm(`Supprimer "${lead.brand_name}" ?`)) return;
-          const fd = new FormData();
-          fd.set("id", lead.id);
-          startTransition(async () => {
-            await deleteLead(fd);
-          });
-        }}
-        disabled={pending}
-        className="text-xs text-red-600 hover:underline"
-      >
-        Supprimer
-      </button>
-    </li>
+      </td>
+      <td className="px-4 py-3 italic" style={{ color: OLIVE }}>
+        {lead.why || <span className="opacity-40 not-italic">—</span>}
+      </td>
+      <td className="px-4 py-3" style={{ color: OLIVE }}>
+        {lead.content_idea || <span className="opacity-40">—</span>}
+      </td>
+      <td className="px-4 py-3">
+        <select
+          defaultValue={lead.status}
+          disabled={pending}
+          onChange={(e) => {
+            const fd = new FormData();
+            fd.set("id", lead.id);
+            fd.set("status", e.target.value);
+            startTransition(async () => {
+              await updateLeadStatus(fd);
+            });
+          }}
+          className="px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider outline-none appearance-none cursor-pointer text-center"
+          style={{
+            backgroundColor: s.bg,
+            color: s.color,
+            border: "none",
+          }}
+        >
+          {STATUSES.map((st) => (
+            <option key={st.v} value={st.v}>
+              {st.l}
+            </option>
+          ))}
+        </select>
+        <div
+          className="mt-1 text-[10px] md:text-xs text-center"
+          style={{ color: OLIVE, opacity: 0.7 }}
+          title={new Date(lead.updated_at).toLocaleString("fr-FR")}
+        >
+          Modifié {timeAgoFr(lead.updated_at)}
+        </div>
+      </td>
+      <td className="px-4 py-3 text-right">
+        <div className="inline-flex items-center gap-1">
+          <EditLeadButton lead={lead} />
+          <button
+            type="button"
+            onClick={() => {
+              if (!confirm(`Supprimer "${lead.brand_name}" ?`)) return;
+              const fd = new FormData();
+              fd.set("id", lead.id);
+              startTransition(async () => {
+                await deleteLead(fd);
+              });
+            }}
+            disabled={pending}
+            aria-label={`Supprimer ${lead.brand_name}`}
+            className="w-8 h-8 rounded-full inline-flex items-center justify-center hover:bg-white transition-colors"
+            style={{ color: OLIVE }}
+            title="Supprimer"
+          >
+            ✕
+          </button>
+        </div>
+      </td>
+    </tr>
   );
 }

@@ -1,14 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fdfaf4;
-  --foreground: #1a1613;
-  --brand: #ff5b78;
-  --brand-ink: #b02a49;
-  --accent: #7f5af0;
-  --muted: #a19a90;
+  --background: #ffffff;
+  --foreground: #1a1210;
+  --brand: #615326;         /* brun olive — CTAs, accents forts */
+  --brand-ink: #493d1c;     /* brun plus foncé — hover */
+  --accent: #f4efc2;        /* cream — cartes, badges, fonds */
+  --accent-ink: #615326;    /* olive sur cream */
+  --muted: #8a7f74;
   --card: #ffffff;
-  --border: #efe7d6;
+  --border: #ece7d3;
 }
 
 @theme inline {
@@ -17,17 +18,28 @@
   --color-brand: var(--brand);
   --color-brand-ink: var(--brand-ink);
   --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
   --color-muted: var(--muted);
   --color-card: var(--card);
   --color-border: var(--border);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-league-spartan);
+}
+
+html {
+  font-size: 17px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 18px;
+  }
 }
 
 html,
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-league-spartan), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -36,29 +48,41 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-weight: 600;
+  font-weight: 700;
   border-radius: 999px;
-  padding: 0.85rem 1.6rem;
+  padding: 1rem 2rem;
+  font-size: 1.05rem;
   transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s;
   cursor: pointer;
   border: none;
+  line-height: 1;
 }
 .btn-primary {
   background: var(--brand);
   color: white;
-  box-shadow: 0 8px 24px -8px rgba(255, 91, 120, 0.6);
 }
 .btn-primary:hover {
   transform: translateY(-1px);
   background: var(--brand-ink);
 }
 .btn-ghost {
-  background: transparent;
+  background: white;
   color: var(--foreground);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--brand);
 }
 .btn-ghost:hover {
-  background: white;
+  background: var(--accent);
+  border-color: var(--brand-ink);
+}
+.btn-cream {
+  background: #f4efc2;
+  color: var(--brand);
+  border-radius: 999px;
+  font-weight: 700;
+}
+.btn-cream:hover {
+  background: #ecdf8f;
+  transform: translateY(-1px);
 }
 .btn:disabled {
   opacity: 0.55;
@@ -69,8 +93,8 @@ body {
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 1.5rem;
+  border-radius: 24px;
+  padding: 1.75rem;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
 }
 
@@ -78,25 +102,46 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.25rem 0.7rem;
+  letter-spacing: 0.06em;
+  padding: 0.4rem 0.9rem;
   border-radius: 999px;
-  background: rgba(255, 91, 120, 0.1);
-  color: var(--brand-ink);
+  background: var(--accent);
+  color: var(--brand);
 }
 
 .link {
-  color: var(--brand-ink);
+  color: var(--brand);
   text-decoration: underline;
   text-underline-offset: 3px;
+  font-weight: 600;
 }
 
+/* marquee défilement infini logos */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  overflow: hidden;
+  width: 100%;
+}
+.marquee-track {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+  animation: marquee 40s linear infinite;
+  width: max-content;
+}
 /* progress bar */
 .progress {
-  height: 8px;
+  height: 10px;
   background: var(--border);
   border-radius: 999px;
   overflow: hidden;
@@ -104,6 +149,6 @@ body {
 .progress > span {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, var(--brand), var(--accent));
+  background: var(--brand);
   transition: width 0.4s ease;
 }

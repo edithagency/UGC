@@ -10,7 +10,7 @@ export default function ThankYou() {
         téléchargement (vérifie tes spams).
       </p>
       <Link href="/dashboard" className="btn btn-primary mt-8 inline-flex">
-        Retour au dashboard
+        Retour à mon parcours
       </Link>
     </div>
   );

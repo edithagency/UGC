@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
   const resend = getResend()!;
   const from = process.env.RESEND_FROM_EMAIL!;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://edithappp.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://edithapppugc.com";
   let sent = 0;
 
   for (const p of profiles) {

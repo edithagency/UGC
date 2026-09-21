@@ -3,14 +3,31 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe";
 
 export async function POST(request: NextRequest) {
-  const { discount } = await request.json().catch(() => ({ discount: false }));
+  const { discount, template } = await request.json().catch(() => ({
+    discount: false,
+    template: undefined,
+  }));
 
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let priceId = process.env.STRIPE_TEMPLATE_PRICE_ID;
+  const templateSlug: string | undefined =
+    typeof template === "string" ? template : undefined;
+  const templateSuffix = templateSlug
+    ? templateSlug.toUpperCase().replace(/-/g, "_")
+    : null;
+
+  const templatePriceEnv = templateSuffix
+    ? process.env[`STRIPE_PRICE_${templateSuffix}`]
+    : undefined;
+  const templateDiscountPriceEnv = templateSuffix
+    ? process.env[`STRIPE_PRICE_${templateSuffix}_DISCOUNT`]
+    : undefined;
+
+  let priceId =
+    templatePriceEnv ?? process.env.STRIPE_TEMPLATE_PRICE_ID;
   let useDiscount = false;
   if (discount && user) {
     const { data } = await supabase
@@ -19,7 +36,10 @@ export async function POST(request: NextRequest) {
       .eq("id", user.id)
       .maybeSingle();
     if (data?.finished_at && !data.template_discount_used) {
-      priceId = process.env.STRIPE_TEMPLATE_DISCOUNT_PRICE_ID ?? priceId;
+      priceId =
+        templateDiscountPriceEnv ??
+        process.env.STRIPE_TEMPLATE_DISCOUNT_PRICE_ID ??
+        priceId;
       useDiscount = true;
     }
   }
@@ -41,6 +61,7 @@ export async function POST(request: NextRequest) {
       metadata: {
         user_id: user?.id ?? "",
         discount_applied: useDiscount ? "1" : "0",
+        template: templateSlug ?? "",
       },
       allow_promotion_codes: true,
     });

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toggleChecklistItem } from "./actions";
 
@@ -16,15 +17,17 @@ export function ChecklistItem({
   checked: boolean;
   disabled?: boolean;
 }) {
+  const router = useRouter();
   const [optimistic, setOptimistic] = useState(checked);
   const [pending, startTransition] = useTransition();
 
   return (
     <li>
       <label
-        className={`card flex items-center gap-3 cursor-pointer select-none ${
+        className={`card flex items-center gap-4 cursor-pointer select-none py-4 ${
           disabled ? "opacity-70 cursor-default" : "hover:border-[var(--brand)]"
         }`}
+        style={{ padding: "1.25rem 1.5rem" }}
       >
         <input
           type="checkbox"
@@ -39,11 +42,16 @@ export function ChecklistItem({
             fd.set("checked", next ? "true" : "false");
             startTransition(async () => {
               await toggleChecklistItem(fd);
+              router.refresh();
             });
           }}
-          className="w-5 h-5 accent-[var(--brand)]"
+          className="w-6 h-6 flex-shrink-0"
+          style={{ accentColor: "#615326" }}
         />
-        <span className={optimistic ? "line-through text-[var(--muted)]" : ""}>
+        <span
+          className={`text-lg ${optimistic ? "line-through opacity-60" : ""}`}
+          style={{ color: "#615326" }}
+        >
           {label}
         </span>
       </label>

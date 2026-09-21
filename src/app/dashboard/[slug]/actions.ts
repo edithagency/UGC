@@ -113,14 +113,9 @@ export async function completeModule(formData: FormData) {
         .from("profiles")
         .update({ finished_at: new Date().toISOString() })
         .eq("id", user.id);
-      revalidatePath("/badge");
-      redirect("/badge?just_finished=1");
     }
   }
 
-  const next = getNextModule(slug);
   revalidatePath(`/dashboard/${slug}`);
   revalidatePath("/dashboard");
-  if (next) redirect(`/dashboard/${next.slug}`);
-  redirect("/dashboard");
 }

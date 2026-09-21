@@ -3,10 +3,59 @@ import { notFound, redirect } from "next/navigation";
 import { requireUser } from "@/lib/dal";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { MODULES, getModule, getNextModule } from "@/lib/modules";
-import { ChecklistItem } from "./ChecklistItem";
-import { completeModule } from "./actions";
+import { Checklist } from "./Checklist";
+import { Module01Content, Module01Footer } from "./Module01Content";
+import { Module02Content, Module02Footer } from "./Module02Content";
+import { Module03Content, Module03Footer } from "./Module03Content";
+import { Module04Content, Module04Footer } from "./Module04Content";
+import { Module05Content, Module05Footer } from "./Module05Content";
+import { Module06Content, Module06Footer } from "./Module06Content";
+import { Module07Content, Module07Footer } from "./Module07Content";
+import { Module08Content, Module08Footer } from "./Module08Content";
+import { Module09Content, Module09Footer } from "./Module09Content";
+import { Module10Content, Module10Footer } from "./Module10Content";
+import { Module11Content, Module11Footer } from "./Module11Content";
+import { Module12Content, Module12Footer } from "./Module12Content";
+import { Module13Content, Module13Footer } from "./Module13Content";
+import { Module14Content, Module14Footer } from "./Module14Content";
+import { Module15Content, Module15Footer } from "./Module15Content";
+import { Module16Content, Module16Footer } from "./Module16Content";
+import { Module17Content, Module17Footer } from "./Module17Content";
+import { Module18Content, Module18Footer } from "./Module18Content";
+import { Module19Content, Module19Footer } from "./Module19Content";
+import { Module20Content, Module20Footer } from "./Module20Content";
+import { Module21Content, Module21Footer } from "./Module21Content";
+import { Module22Content, Module22Footer } from "./Module22Content";
+import { Module23Content, Module23Footer } from "./Module23Content";
+export const dynamic = "force-dynamic";
 
 type Params = Promise<{ slug: string }>;
+
+const MODULES_WITH_RICH_CONTENT: Record<string, boolean> = {
+  "01-comprendre-ugc": true,
+  "02-persona-et-positionnement": true,
+  "03-materiel-pour-commencer": true,
+  "04-s-entrainer-sans-marque": true,
+  "05-formats-ugc-a-maitriser": true,
+  "06-construire-une-bonne-video": true,
+  "07-apprendre-a-filmer": true,
+  "08-bases-du-montage": true,
+  "09-gifting": true,
+  "10-contenus-portfolio": true,
+  "11-portfolio-qui-attire": true,
+  "12-creer-sa-micro-entreprise": true,
+  "13-fixer-tes-tarifs": true,
+  "14-droits-utilisation": true,
+  "15-contrats-facturation": true,
+  "16-bonnes-marques-a-contacter": true,
+  "17-prospection-avec-le-tracker": true,
+  "18-pitch-qui-donne-envie": true,
+  "19-demarcher-et-relancer": true,
+  "20-repondre-negocier": true,
+  "21-reussir-premiere-collab": true,
+  "22-fideliser-developper": true,
+  "23-se-differencier-niveau-superieur": true,
+};
 
 export default async function ModulePage({ params }: { params: Params }) {
   const { slug } = await params;
@@ -16,7 +65,6 @@ export default async function ModulePage({ params }: { params: Params }) {
   const user = await requireUser();
   const supabase = await createSupabaseServerClient();
 
-  // vérifier déblocage
   if (mod.order > 1) {
     const previous = MODULES.find((m) => m.order === mod.order - 1)!;
     const { data: prev } = await supabase
@@ -37,76 +85,123 @@ export default async function ModulePage({ params }: { params: Params }) {
     .eq("module_slug", slug)
     .maybeSingle();
 
-  const checked = new Set<string>(progress?.checked_items ?? []);
+  const checkedItems = progress?.checked_items ?? [];
   const isCompleted = !!progress?.completed_at;
-  const allChecked = mod.checklist.every((c) => checked.has(c.id));
   const next = getNextModule(slug);
+  const isRich = MODULES_WITH_RICH_CONTENT[slug] === true;
 
   return (
-    <div className="max-w-3xl mx-auto px-5 py-10">
-      <Link href="/dashboard" className="text-sm text-[var(--muted)] hover:underline">
-        ← Retour au dashboard
-      </Link>
+    <div className="max-w-7xl mx-auto px-6 py-10">
+      {slug === "01-comprendre-ugc" ? (
+        <Module01Content />
+      ) : slug === "02-persona-et-positionnement" ? (
+        <Module02Content />
+      ) : slug === "03-materiel-pour-commencer" ? (
+        <Module03Content />
+      ) : slug === "04-s-entrainer-sans-marque" ? (
+        <Module04Content />
+      ) : slug === "05-formats-ugc-a-maitriser" ? (
+        <Module05Content />
+      ) : slug === "06-construire-une-bonne-video" ? (
+        <Module06Content />
+      ) : slug === "07-apprendre-a-filmer" ? (
+        <Module07Content />
+      ) : slug === "08-bases-du-montage" ? (
+        <Module08Content />
+      ) : slug === "09-gifting" ? (
+        <Module09Content />
+      ) : slug === "10-contenus-portfolio" ? (
+        <Module10Content />
+      ) : slug === "11-portfolio-qui-attire" ? (
+        <Module11Content />
+      ) : slug === "12-creer-sa-micro-entreprise" ? (
+        <Module12Content />
+      ) : slug === "13-fixer-tes-tarifs" ? (
+        <Module13Content />
+      ) : slug === "14-droits-utilisation" ? (
+        <Module14Content />
+      ) : slug === "15-contrats-facturation" ? (
+        <Module15Content />
+      ) : slug === "16-bonnes-marques-a-contacter" ? (
+        <Module16Content />
+      ) : slug === "17-prospection-avec-le-tracker" ? (
+        <Module17Content />
+      ) : slug === "18-pitch-qui-donne-envie" ? (
+        <Module18Content />
+      ) : slug === "19-demarcher-et-relancer" ? (
+        <Module19Content />
+      ) : slug === "20-repondre-negocier" ? (
+        <Module20Content />
+      ) : slug === "21-reussir-premiere-collab" ? (
+        <Module21Content />
+      ) : slug === "22-fideliser-developper" ? (
+        <Module22Content />
+      ) : slug === "23-se-differencier-niveau-superieur" ? (
+        <Module23Content />
+      ) : (
+        <>
+          <Link href="/dashboard" className="text-sm text-[var(--muted)] hover:underline">
+            ← Mon parcours
+          </Link>
 
-      <div className="mt-6">
-        <span className="pill">
-          Module {String(mod.order).padStart(2, "0")} / {MODULES.length}
-        </span>
-        <h1 className="text-3xl md:text-4xl font-black mt-3">{mod.title}</h1>
-        <p className="text-lg text-[var(--muted)] mt-1">{mod.tagline}</p>
-      </div>
-
-      <div className="card mt-6">
-        <p className="leading-relaxed">{mod.intro}</p>
-      </div>
-
-      <h2 className="text-xl font-bold mt-10">Ta checklist</h2>
-      <p className="text-sm text-[var(--muted)]">
-        Coche au fur et à mesure. Quand tout est coché, tu peux valider le module.
-      </p>
-      <ul className="mt-4 space-y-2">
-        {mod.checklist.map((item) => (
-          <ChecklistItem
-            key={item.id}
-            slug={slug}
-            itemId={item.id}
-            label={item.label}
-            checked={checked.has(item.id)}
-            disabled={isCompleted}
-          />
-        ))}
-      </ul>
-
-      <div className="mt-8 flex flex-wrap items-center gap-3">
-        {isCompleted ? (
-          <>
-            <span className="pill" style={{ background: "rgba(16,185,129,0.1)", color: "#065f46" }}>
-              ✓ Module validé
+          <div className="mt-8">
+            <span className="pill">
+              Module {String(mod.order).padStart(2, "0")} / {MODULES.length}
             </span>
-            {next ? (
-              <Link href={`/dashboard/${next.slug}`} className="btn btn-primary">
-                Passer au module {next.order} →
-              </Link>
-            ) : (
-              <Link href="/badge" className="btn btn-primary">
-                🏆 Voir mon badge
-              </Link>
-            )}
-          </>
-        ) : (
-          <form action={completeModule}>
-            <input type="hidden" name="slug" value={slug} />
-            <button
-              type="submit"
-              disabled={!allChecked}
-              className="btn btn-primary"
-              title={allChecked ? "" : "Coche tous les items d'abord"}
+            <h1
+              className="text-3xl md:text-5xl font-black uppercase tracking-tight mt-4 leading-tight"
+              style={{ color: "#615326" }}
             >
-              Marquer comme terminé
-            </button>
-          </form>
-        )}
-      </div>
+              {mod.title}
+            </h1>
+            <p className="text-lg md:text-xl text-[var(--muted)] mt-3">{mod.tagline}</p>
+          </div>
+
+          <div className="card mt-8">
+            <p className="leading-relaxed text-lg">{mod.intro}</p>
+          </div>
+
+          <h2
+            className="text-xl md:text-2xl font-black mt-12 uppercase tracking-tight"
+            style={{ color: "#615326" }}
+          >
+            Peux-tu valider ce module ?
+          </h2>
+        </>
+      )}
+
+      <Checklist
+        slug={slug}
+        items={mod.checklist}
+        initialChecked={checkedItems}
+        isCompleted={isCompleted}
+        nextSlug={next?.slug}
+        nextOrder={next?.order}
+      />
+
+      {slug === "01-comprendre-ugc" && <Module01Footer />}
+      {slug === "02-persona-et-positionnement" && <Module02Footer />}
+      {slug === "03-materiel-pour-commencer" && <Module03Footer />}
+      {slug === "04-s-entrainer-sans-marque" && <Module04Footer />}
+      {slug === "05-formats-ugc-a-maitriser" && <Module05Footer />}
+      {slug === "06-construire-une-bonne-video" && <Module06Footer />}
+      {slug === "07-apprendre-a-filmer" && <Module07Footer />}
+      {slug === "08-bases-du-montage" && <Module08Footer />}
+      {slug === "09-gifting" && <Module09Footer />}
+      {slug === "10-contenus-portfolio" && <Module10Footer />}
+      {slug === "11-portfolio-qui-attire" && <Module11Footer />}
+      {slug === "12-creer-sa-micro-entreprise" && <Module12Footer />}
+      {slug === "13-fixer-tes-tarifs" && <Module13Footer />}
+      {slug === "14-droits-utilisation" && <Module14Footer />}
+      {slug === "15-contrats-facturation" && <Module15Footer />}
+      {slug === "16-bonnes-marques-a-contacter" && <Module16Footer />}
+      {slug === "17-prospection-avec-le-tracker" && <Module17Footer />}
+      {slug === "18-pitch-qui-donne-envie" && <Module18Footer />}
+      {slug === "19-demarcher-et-relancer" && <Module19Footer />}
+      {slug === "20-repondre-negocier" && <Module20Footer />}
+      {slug === "21-reussir-premiere-collab" && <Module21Footer />}
+      {slug === "22-fideliser-developper" && <Module22Footer />}
+      {slug === "23-se-differencier-niveau-superieur" && <Module23Footer isCompleted={isCompleted} />}
     </div>
   );
 }
