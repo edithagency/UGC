@@ -108,7 +108,7 @@ export function EditLeadButton({ lead }: { lead: Lead }) {
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`Modifier ${lead.brand_name}`}
-        className="w-8 h-8 rounded-full inline-flex items-center justify-center hover:bg-white transition-colors"
+        className="w-6 h-6 inline-flex items-center justify-center hover:opacity-70 transition-opacity"
         style={{ color: OLIVE }}
         title="Modifier"
       >
