@@ -64,7 +64,7 @@ export function LeadRow({ lead }: { lead: Lead }) {
 
   return (
     <tr
-      className="align-top"
+      className="align-middle"
       style={{ borderBottom: `1px solid ${CREAM}`, backgroundColor: rowBg }}
     >
       <td className="px-6 py-2.5 text-center">
