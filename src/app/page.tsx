@@ -16,28 +16,37 @@ export default async function Landing() {
 
   return (
     <div>
-      {/* HERO — mobile: flow naturel, desktop: overlay absolu */}
+      {/* HERO — image + textes/bouton en overlay, tout proportionnel a la largeur */}
       <section
-        className="relative w-full min-h-[65vh] md:min-h-0 md:aspect-[1980/1040] flex flex-col justify-center gap-4 px-6"
+        className="relative w-full"
         style={{
+          aspectRatio: "1980 / 1040",
           backgroundImage: "url('/hero.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="md:absolute md:bottom-[52%] md:left-[6.5%]">
+        <div className="absolute" style={{ bottom: "52%", left: "6.5%" }}>
           <HeroTitle />
         </div>
         <div
-          className="uppercase tracking-widest font-black italic text-lg sm:text-xl md:text-3xl lg:text-4xl md:absolute md:bottom-[48%] md:left-[6.5%]"
-          style={{ color: "#615326" }}
+          className="absolute uppercase tracking-widest font-black italic"
+          style={{ color: "#615326", bottom: "48%", left: "6.5%", fontSize: "clamp(0.55rem, 1.7vw, 2.25rem)" }}
         >
           Étape par étape
         </div>
         <Link
           href="/signup"
-          className="self-start uppercase tracking-wider text-xs sm:text-sm md:text-base rounded-full px-5 py-3 md:px-8 md:py-4 transition-transform duration-200 ease-out hover:scale-105 md:absolute md:bottom-[34%] md:left-[6.5%]"
-          style={{ backgroundColor: "#f4efc2", color: "#615326", border: "0.5px solid #615326" }}
+          className="absolute uppercase tracking-wider rounded-full transition-transform duration-200 ease-out hover:scale-105"
+          style={{
+            backgroundColor: "#f4efc2",
+            color: "#615326",
+            border: "0.5px solid #615326",
+            bottom: "34%",
+            left: "6.5%",
+            fontSize: "clamp(0.45rem, 1vw, 1rem)",
+            padding: "clamp(0.35rem, 1vw, 1rem) clamp(0.75rem, 2vw, 2rem)",
+          }}
         >
           Commencer les modules
         </Link>

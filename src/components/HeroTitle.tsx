@@ -15,8 +15,8 @@ export function HeroTitle() {
 
   return (
     <h1
-      className="font-black uppercase tracking-tight leading-none md:whitespace-nowrap text-3xl sm:text-5xl md:text-7xl lg:text-8xl"
-      style={{ color: "#615326" }}
+      className="font-black uppercase tracking-tight leading-none whitespace-nowrap"
+      style={{ color: "#615326", fontSize: "clamp(1.5rem, 5vw, 6rem)" }}
     >
       {FULL_TEXT.slice(0, shown).split("").map((ch, i) =>
         ch === " " ? (
