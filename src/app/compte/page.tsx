@@ -72,8 +72,8 @@ export default async function ComptePage() {
   const kitDone = kit ? Object.values(kit).filter(Boolean).length : 0;
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10 text-[var(--muted)] [&_strong]:text-[#615326]">
-      <div className="flex items-center gap-5">
+    <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 text-[var(--muted)] [&_strong]:text-[#615326]">
+      <div className="flex items-center gap-5 mt-6">
         <span
           className="relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center"
           style={{ transform: "rotate(-10deg)", color: CREAM }}

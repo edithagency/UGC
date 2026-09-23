@@ -24,7 +24,6 @@ export function Checklist({
 }) {
   const router = useRouter();
   const [checked, setChecked] = useState<Set<string>>(new Set(initialChecked));
-  const [pending, startTransition] = useTransition();
   const [completing, startCompleting] = useTransition();
   const [justCompleted, setJustCompleted] = useState(false);
 
@@ -33,18 +32,19 @@ export function Checklist({
 
   const toggle = (id: string, next: boolean) => {
     if (done) return;
-    const updated = new Set(checked);
-    if (next) updated.add(id);
-    else updated.delete(id);
-    setChecked(updated);
-
+    // Update immediat de l'UI, la sauvegarde serveur part en arriere-plan
+    setChecked((prev) => {
+      const updated = new Set(prev);
+      if (next) updated.add(id);
+      else updated.delete(id);
+      return updated;
+    });
     const fd = new FormData();
     fd.set("slug", slug);
     fd.set("itemId", id);
     fd.set("checked", next ? "true" : "false");
-    startTransition(async () => {
-      await toggleChecklistItem(fd);
-    });
+    // Fire-and-forget, pas de blocage UI
+    void toggleChecklistItem(fd);
   };
 
   const onComplete = () => {
@@ -76,7 +76,7 @@ export function Checklist({
                 <input
                   type="checkbox"
                   checked={isOn}
-                  disabled={done || pending}
+                  disabled={done}
                   onChange={(e) => toggle(item.id, e.target.checked)}
                   className="w-6 h-6 flex-shrink-0"
                   style={{ accentColor: "#615326" }}

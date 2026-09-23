@@ -96,11 +96,6 @@ export default async function TemplatePage() {
         </p>
       )}
 
-      <div className="mt-10 text-sm text-[var(--muted)] text-center max-w-3xl mx-auto">
-        <strong>Facturation & TVA :</strong> vente en micro-entreprise France, TVA
-        non applicable art. 293 B du CGI en dessous du seuil. Facture envoyée par
-        email après paiement.
-      </div>
     </div>
   );
 }

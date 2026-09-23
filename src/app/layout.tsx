@@ -26,9 +26,23 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <SiteHeader isLoggedIn={!!user} />
         <main className="flex-1 pt-14">{children}</main>
         <footer className="border-t border-[var(--border)] py-10 mt-20">
-          <div className="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-between gap-4 text-sm text-[var(--muted)]">
-            <span>© {new Date().getFullYear()} edithappp — fait avec ❤️ en France</span>
-            <nav className="flex gap-4">
+          <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-4 text-sm text-[var(--muted)]">
+            <a
+              href="https://www.instagram.com/edithap.ugc/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram @edithap.ugc"
+              className="inline-flex items-center gap-2 hover:opacity-80"
+              style={{ color: "#615326" }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+              </svg>
+              <span className="uppercase tracking-wider text-xs font-black">@edithap.ugc</span>
+            </a>
+            <nav className="flex flex-wrap justify-center gap-4">
               <Link href="/confidentialite" className="hover:underline">
                 Confidentialité
               </Link>
