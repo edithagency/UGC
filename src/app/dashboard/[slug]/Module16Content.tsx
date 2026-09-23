@@ -230,7 +230,7 @@ function AddBrandButton({
                   illimité de marques.
                 </p>
                 <Link
-                  href="/template"
+                  href="/boutique"
                   className="block w-full text-center uppercase tracking-wider text-xs md:text-sm font-black px-4 py-3 rounded-full hover:scale-[1.02] transition-transform"
                   style={{ backgroundColor: OLIVE, color: "#ffffff" }}
                 >

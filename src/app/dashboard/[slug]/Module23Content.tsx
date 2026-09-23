@@ -382,7 +382,7 @@ function FormationTermineeBloc() {
           Ouvrir mon Tracker
         </Link>
         <Link
-          href="/template"
+          href="/boutique"
           className="uppercase tracking-wider text-[10px] md:text-xs font-black px-4 py-2 rounded-full bg-white hover:scale-105 transition-transform"
           style={{ color: OLIVE }}
         >

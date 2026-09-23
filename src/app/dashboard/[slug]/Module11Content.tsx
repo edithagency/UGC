@@ -202,7 +202,7 @@ export function Module11Content() {
 
       <div className="mt-6 flex justify-center">
         <Link
-          href="/template"
+          href="/boutique"
           className="uppercase tracking-wider text-xs md:text-sm font-black px-5 py-3 rounded-full hover:scale-105 transition-transform"
           style={{ backgroundColor: OLIVE, color: "#ffffff" }}
         >

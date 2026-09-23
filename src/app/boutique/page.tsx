@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/dal";
-import { TemplateCard } from "./TemplateCard";
+import { BoutiqueGrid } from "./BoutiqueGrid";
 import { stripeEnabled } from "@/lib/stripe";
 
 const OLIVE = "#615326";
@@ -20,6 +20,7 @@ const TEMPLATES: Template[] = [
     name: "TRACKER PRO",
     desc: "Débloque un nombre illimité de marques dans ton Tracker et suis toutes tes collaborations.",
     price: 19.99,
+    image: "/templates/tracker-pro.png",
   },
   {
     slug: "black-and-white",
@@ -28,12 +29,6 @@ const TEMPLATES: Template[] = [
     price: 14.99,
     image: "/templates/black-and-white.png",
   },
-  { slug: "template-02", name: "Template 2", desc: "Petite description du style", price: 14.99 },
-  { slug: "template-03", name: "Template 3", desc: "Petite description du style", price: 14.99 },
-  { slug: "template-04", name: "Template 4", desc: "Petite description du style", price: 14.99 },
-  { slug: "template-05", name: "Template 5", desc: "Petite description du style", price: 14.99 },
-  { slug: "template-06", name: "Template 6", desc: "Petite description du style", price: 14.99 },
-  { slug: "template-07", name: "Template 7", desc: "Petite description du style", price: 14.99 },
 ];
 
 export default async function TemplatePage() {
@@ -41,7 +36,7 @@ export default async function TemplatePage() {
   const stripeReady = stripeEnabled();
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10 text-[var(--muted)] [&_strong]:text-[#615326]">
+    <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 text-[var(--muted)] [&_strong]:text-[#615326]">
       <div className="flex items-center gap-5 mt-6">
         <span
           className="relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center"
@@ -84,20 +79,12 @@ export default async function TemplatePage() {
           ))}
         </div>
       </div>
-      <p className="text-lg md:text-xl mt-3 text-[var(--muted)]">
-        Débloque ton Tracker Pro et choisis parmi 7 templates de portfolio
-        UGC prêts à l&apos;emploi.
+      <p className="text-base md:text-xl mt-3 text-[var(--muted)]">
+        Débloque ton Tracker Pro et récupère ton template de portfolio UGC
+        prêt à l&apos;emploi.
       </p>
 
-      <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {TEMPLATES.map((t) => (
-          <TemplateCard
-            key={t.slug}
-            template={t}
-            stripeReady={stripeReady}
-          />
-        ))}
-      </div>
+      <BoutiqueGrid templates={TEMPLATES} stripeReady={stripeReady} />
 
       {!user && (
         <p className="text-center text-sm text-[var(--muted)] mt-8">

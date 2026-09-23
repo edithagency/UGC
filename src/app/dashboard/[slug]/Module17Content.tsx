@@ -8,7 +8,7 @@ const CREAM = "#f4efc2";
 const H2_CLASS = "text-xl md:text-2xl font-black uppercase tracking-tight";
 
 const FREE_LIMIT = 10;
-const PRO_URL = "/template";
+const PRO_URL = "/boutique";
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
   a_contacter: { bg: "#f0e59b", color: "#6f5f1f" },

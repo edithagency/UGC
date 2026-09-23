@@ -26,7 +26,7 @@ export default async function Dashboard() {
   const CREAM = "#f4efc2";
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10 text-[var(--muted)] [&_strong]:text-[#615326]">
+    <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 text-[var(--muted)] [&_strong]:text-[#615326]">
       <div className="flex items-center gap-5 mt-6">
         <span
           className="relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center"
@@ -227,7 +227,7 @@ export default async function Dashboard() {
             <Link href="/tracker" className="btn btn-primary">
               Ouvrir le tracker démarchage →
             </Link>
-            <Link href="/template" className="btn btn-ghost" style={{ color: "#615326" }}>
+            <Link href="/boutique" className="btn btn-ghost" style={{ color: "#615326" }}>
               Voir les templates portfolio
             </Link>
           </div>

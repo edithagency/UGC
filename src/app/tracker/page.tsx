@@ -55,7 +55,7 @@ export default async function TrackerPage() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10 text-[var(--muted)] [&_strong]:text-[#615326]">
+    <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 text-[var(--muted)] [&_strong]:text-[#615326]">
 <div className="flex items-center gap-5 mt-6">
         <span
           className="relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center"
@@ -108,17 +108,17 @@ export default async function TrackerPage() {
         className="mt-8 rounded-2xl p-5 md:p-6 relative"
         style={{ backgroundColor: CREAM }}
       >
-        <div className="absolute top-4 right-4 md:top-5 md:right-5">
+        <div className="hidden md:block absolute top-5 right-5">
           <NewLeadForm />
         </div>
         <div
-          className="uppercase tracking-wider text-[10px] md:text-xs font-black pr-40"
+          className="uppercase tracking-wider text-[10px] md:text-xs font-black md:pr-40"
           style={{ color: OLIVE }}
         >
           Objectif aujourd'hui
         </div>
         <div
-          className="text-xl md:text-2xl font-black mt-1 uppercase tracking-tight pr-40"
+          className="text-lg md:text-2xl font-black mt-1 uppercase tracking-tight md:pr-40"
           style={{ color: OLIVE }}
         >
           {remaining === 0
@@ -139,6 +139,9 @@ export default async function TrackerPage() {
           style={{ color: OLIVE, opacity: 0.8 }}
         >
           {sentToday} / {DAILY_GOAL} envoyées aujourd'hui
+        </div>
+        <div className="mt-4 md:hidden">
+          <NewLeadForm />
         </div>
       </div>
 

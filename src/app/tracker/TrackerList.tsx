@@ -175,21 +175,21 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
     <div className="mt-4 overflow-x-auto rounded-2xl" style={{ backgroundColor: "#faf7e0" }}>
       <table className="w-full text-sm min-w-[1200px] table-fixed">
         <colgroup>
-          <col style={{ width: "16%" }} />
           <col style={{ width: "13%" }} />
-          <col style={{ width: "12%" }} />
-          <col style={{ width: "15%" }} />
-          <col style={{ width: "15%" }} />
-          <col style={{ width: "18%" }} />
-          <col style={{ width: "11%" }} />
+          <col style={{ width: "9%" }} />
+          <col style={{ width: "9%" }} />
+          <col style={{ width: "17%" }} />
+          <col style={{ width: "25%" }} />
+          <col style={{ width: "17%" }} />
+          <col style={{ width: "10%" }} />
         </colgroup>
         <thead>
           <tr
             className="uppercase tracking-wider text-[10px] md:text-xs font-black text-center"
             style={{ color: OLIVE, borderBottom: `1.5px solid ${CREAM}` }}
           >
-            <th className="pl-2 pr-4 py-2.5 text-left">Marque</th>
-            <th className="px-6 py-2.5 text-center">
+            <th className="px-3 py-2.5 text-center">Marque</th>
+            <th className="px-3 py-2.5 text-center">
               <FilterHeader
                 label="Secteur"
                 options={sectorOptions}
@@ -197,10 +197,10 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
                 onChange={setSector}
               />
             </th>
-            <th className="px-6 py-2.5 text-center">Source</th>
-            <th className="px-6 py-2.5 text-center">Contact</th>
-            <th className="px-6 py-2.5 text-center">Lien</th>
-            <th className="pl-4 pr-2 py-2.5 text-right">
+            <th className="pl-8 pr-3 py-2.5 text-center">Source</th>
+            <th className="pl-16 pr-3 py-2.5 text-center">Contact</th>
+            <th className="px-3 py-2.5 text-center">Lien</th>
+            <th className="px-3 py-2.5 text-center">
               <FilterHeader
                 label="Statut"
                 options={STATUSES}
@@ -208,7 +208,7 @@ export function TrackerList({ leads }: { leads: Lead[] }) {
                 onChange={setStatus}
               />
             </th>
-            <th className="px-6 py-2.5 text-center"></th>
+            <th className="px-3 py-2.5 text-center"></th>
           </tr>
         </thead>
         <tbody>

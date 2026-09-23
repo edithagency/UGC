@@ -43,7 +43,7 @@ export default function CGV() {
         </h2>
         <p className="mt-2">
           Les produits sont décrits sur la page{" "}
-          <a href="/template" className="link">Boutique</a>. Les prix sont indiqués en
+          <a href="/boutique" className="link">Boutique</a>. Les prix sont indiqués en
           euros, toutes taxes comprises (TVA non applicable, art. 293 B du CGI).
         </p>
         <ul className="list-disc pl-6 space-y-1 mt-2">

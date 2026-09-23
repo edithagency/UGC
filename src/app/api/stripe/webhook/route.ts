@@ -41,8 +41,8 @@ export async function POST(request: NextRequest) {
     const s = event.data.object;
     const admin = await createSupabaseServiceClient();
     const userId = s.metadata?.user_id || null;
-    const templateSlug = (s.metadata?.template as string) || "";
-    const discountApplied = s.metadata?.discount_applied === "1";
+    const templatesMeta = (s.metadata?.templates as string) || (s.metadata?.template as string) || "";
+    const slugs = templatesMeta.split(",").map((x) => x.trim()).filter(Boolean);
     const email = s.customer_details?.email ?? s.customer_email ?? "";
 
     await admin.from("orders").insert({
@@ -53,46 +53,38 @@ export async function POST(request: NextRequest) {
         typeof s.payment_intent === "string" ? s.payment_intent : null,
       amount_cents: s.amount_total ?? 0,
       currency: s.currency ?? "eur",
-      discount_applied: discountApplied,
       status: "paid",
     });
 
-    if (userId && discountApplied) {
-      await admin
-        .from("profiles")
-        .update({ template_discount_used: true })
-        .eq("id", userId);
-    }
-
-    // Tracker Pro : débloquer le compte
-    if (templateSlug === "tracker-pro" && userId) {
+    // Tracker Pro : débloquer le compte si présent dans le panier
+    if (userId && slugs.includes("tracker-pro")) {
       await admin
         .from("profiles")
         .update({ tracker_pro: true })
         .eq("id", userId);
     }
 
-    // Envoyer l'email de livraison
+    // Envoyer un email de livraison pour CHAQUE produit
     const resend = getResend();
     const from = process.env.RESEND_FROM_EMAIL;
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://edithapppugc.com";
     if (resend && from && email) {
-      const productName = PRODUCT_NAMES[templateSlug] ?? "Ton produit";
-      const isTrackerPro = templateSlug === "tracker-pro";
-      const envKey = templateSlug
-        ? `DELIVERY_URL_${templateSlug.toUpperCase().replace(/-/g, "_")}`
-        : null;
-      const downloadUrl = envKey ? process.env[envKey] ?? null : null;
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://edithapppugc.com";
-      const { subject, html } = deliveryEmail({
-        productName,
-        downloadUrl,
-        siteUrl,
-        isTrackerPro,
-      });
-      try {
-        await resend.emails.send({ from, to: email, subject, html });
-      } catch (e) {
-        console.error("Resend delivery email failed", e);
+      for (const slug of slugs) {
+        const productName = PRODUCT_NAMES[slug] ?? "Ton produit";
+        const isTrackerPro = slug === "tracker-pro";
+        const envKey = `DELIVERY_URL_${slug.toUpperCase().replace(/-/g, "_")}`;
+        const downloadUrl = process.env[envKey] ?? null;
+        const { subject, html } = deliveryEmail({
+          productName,
+          downloadUrl,
+          siteUrl,
+          isTrackerPro,
+        });
+        try {
+          await resend.emails.send({ from, to: email, subject, html });
+        } catch (e) {
+          console.error("Resend delivery email failed", e);
+        }
       }
     }
   }
