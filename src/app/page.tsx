@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getSubscriberCount } from "@/lib/dal";
 import { PART_TITLES } from "@/lib/modules";
 import { UgcVideo } from "@/components/UgcVideo";
+import { HeroTitle } from "@/components/HeroTitle";
 
 const COUNTER_THRESHOLD = 50;
 
@@ -25,14 +26,19 @@ export default async function Landing() {
           backgroundPosition: "center",
         }}
       >
+        <div className="absolute" style={{ bottom: "52%", left: "6.5%" }}>
+          <HeroTitle />
+        </div>
+        <div
+          className="absolute uppercase tracking-widest font-black italic text-xl md:text-3xl lg:text-4xl"
+          style={{ color: "#615326", bottom: "48%", left: "6.5%" }}
+        >
+          Étape par étape
+        </div>
         <Link
           href="/signup"
-          className="absolute uppercase tracking-wider text-sm md:text-base text-white rounded-full px-8 py-4 transition-transform duration-200 ease-out hover:scale-105"
-          style={{
-            backgroundColor: "#615326",
-            bottom: "34%",
-            left: "6.5%",
-          }}
+          className="absolute uppercase tracking-wider text-sm md:text-base rounded-full px-8 py-4 transition-transform duration-200 ease-out hover:scale-105"
+          style={{ backgroundColor: "#f4efc2", color: "#615326", border: "0.5px solid #615326", bottom: "34%", left: "6.5%" }}
         >
           Commencer les modules
         </Link>
@@ -40,7 +46,7 @@ export default async function Landing() {
 
       {/* Sous-hero */}
       <section className="text-center pt-8 md:pt-12 px-6">
-        <p className="text-lg md:text-xl mt-8 max-w-5xl mx-auto leading-relaxed text-[var(--muted)] whitespace-nowrap">
+        <p className="text-base md:text-xl mt-8 max-w-5xl mx-auto leading-relaxed text-[var(--muted)] md:whitespace-nowrap">
           Tout ce que j'aurais aimé savoir en commençant l'UGC.{" "}
           <strong style={{ color: "#615326" }}>23 modules gratuits</strong> pour
           apprendre à te lancer.
