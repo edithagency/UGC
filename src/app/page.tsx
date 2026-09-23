@@ -16,29 +16,28 @@ export default async function Landing() {
 
   return (
     <div>
-      {/* HERO — image avec texte intégré + bouton en overlay */}
+      {/* HERO — mobile: flow naturel, desktop: overlay absolu */}
       <section
-        className="relative w-full"
+        className="relative w-full min-h-[65vh] md:min-h-0 md:aspect-[1980/1040] flex flex-col justify-center gap-4 px-6"
         style={{
-          aspectRatio: "1980 / 1040",
           backgroundImage: "url('/hero.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute" style={{ bottom: "52%", left: "6.5%" }}>
+        <div className="md:absolute md:bottom-[52%] md:left-[6.5%]">
           <HeroTitle />
         </div>
         <div
-          className="absolute uppercase tracking-widest font-black italic text-xl md:text-3xl lg:text-4xl"
-          style={{ color: "#615326", bottom: "48%", left: "6.5%" }}
+          className="uppercase tracking-widest font-black italic text-lg sm:text-xl md:text-3xl lg:text-4xl md:absolute md:bottom-[48%] md:left-[6.5%]"
+          style={{ color: "#615326" }}
         >
           Étape par étape
         </div>
         <Link
           href="/signup"
-          className="absolute uppercase tracking-wider text-sm md:text-base rounded-full px-8 py-4 transition-transform duration-200 ease-out hover:scale-105"
-          style={{ backgroundColor: "#f4efc2", color: "#615326", border: "0.5px solid #615326", bottom: "34%", left: "6.5%" }}
+          className="self-start uppercase tracking-wider text-xs sm:text-sm md:text-base rounded-full px-5 py-3 md:px-8 md:py-4 transition-transform duration-200 ease-out hover:scale-105 md:absolute md:bottom-[34%] md:left-[6.5%]"
+          style={{ backgroundColor: "#f4efc2", color: "#615326", border: "0.5px solid #615326" }}
         >
           Commencer les modules
         </Link>
